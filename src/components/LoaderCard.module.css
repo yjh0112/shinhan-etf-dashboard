@@ -1,0 +1,44 @@
+.card {
+  background:var(--surface); border:1px solid var(--border); border-radius:12px;
+  padding:20px 24px; margin-bottom:20px; box-shadow:var(--shadow-sm);
+  display:flex; align-items:center; gap:18px; flex-wrap:wrap;
+}
+.icon  { font-size:28px; flex-shrink:0; }
+.text  { flex:1; }
+.title { font-size:14px; font-weight:600; margin-bottom:3px; }
+.desc  { font-size:11px; color:var(--text3); line-height:1.6; }
+.desc code { background:#EEF3FF; color:var(--blue); padding:1px 5px; border-radius:3px; font-family:var(--mono); font-size:10px; }
+.actions { display:flex; gap:8px; flex-wrap:wrap; }
+
+.btnPrimary {
+  padding:8px 16px; border-radius:8px; border:none;
+  background:var(--blue); color:#fff;
+  font-size:12px; font-weight:600; cursor:pointer; font-family:var(--font);
+  transition:all .15s; display:flex; align-items:center; gap:5px;
+}
+.btnPrimary:hover    { background:var(--blue-hover); }
+.btnPrimary:disabled { opacity:.5; cursor:not-allowed; }
+.btnGhost {
+  padding:8px 16px; border-radius:8px;
+  background:var(--surface); color:var(--text2);
+  border:1px solid var(--border2);
+  font-size:12px; font-weight:600; cursor:pointer; font-family:var(--font); transition:all .15s;
+}
+.btnGhost:hover    { border-color:var(--blue); color:var(--blue); }
+.btnGhost:disabled { opacity:.5; cursor:not-allowed; }
+
+.progressCard {
+  background:var(--surface); border:1px solid var(--border); border-radius:10px;
+  padding:14px 20px; margin-bottom:16px; box-shadow:var(--shadow-sm);
+}
+.progressMeta  { display:flex; justify-content:space-between; font-size:11px; color:var(--text3); margin-bottom:8px; }
+.progressTrack { height:6px; background:var(--border); border-radius:3px; overflow:hidden; }
+.progressFill  { height:100%; background:linear-gradient(90deg, var(--blue), #5E9FFF); border-radius:3px; transition:width .4s ease; }
+
+.errorCard {
+  background:var(--surface); border:2px dashed var(--border2); border-radius:14px;
+  padding:48px 32px; text-align:center; margin-bottom:24px;
+}
+.errorIcon  { font-size:36px; margin-bottom:12px; }
+.errorTitle { font-size:16px; font-weight:700; color:var(--text); margin-bottom:8px; }
+.errorDesc  { font-size:12px; color:var(--text3); line-height:1.8; margin-bottom:20px; }

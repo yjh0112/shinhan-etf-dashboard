@@ -1,0 +1,105 @@
+/*
+  ── 원신한체 @font-face (파일 준비 후 주석 해제) ──
+  @font-face { font-family:'WonShinhan'; src:url('/fonts/WonShinhan-Light.woff2') format('woff2'); font-weight:300; }
+  @font-face { font-family:'WonShinhan'; src:url('/fonts/WonShinhan-Regular.woff2') format('woff2'); font-weight:400; }
+  @font-face { font-family:'WonShinhan'; src:url('/fonts/WonShinhan-Medium.woff2') format('woff2'); font-weight:500; }
+  @font-face { font-family:'WonShinhan'; src:url('/fonts/WonShinhan-Bold.woff2') format('woff2'); font-weight:700; }
+*/
+
+/* ── Shinhan Premier Design Tokens ── */
+:root {
+  --navy:        #0a1628;
+  --navy-mid:    #112040;
+  --navy-light:  #1a3055;
+  --gold:        #C9A84C;
+  --gold-light:  #E2C97E;
+  --blue:        #1A56FF;
+  --blue-hover:  #0040DD;
+  --blue-light:  #EEF3FF;
+
+  --bg:          #F4F5F7;
+  --surface:     #FFFFFF;
+  --surface2:    #F9FAFB;
+  --border:      #E8EAED;
+  --border2:     #D1D5DB;
+
+  --text:        #111827;
+  --text2:       #374151;
+  --text3:       #6B7280;
+  --muted:       #9CA3AF;
+
+  --up:          #0D9488;
+  --dn:          #DC2626;
+  --warn:        #D97706;
+
+  --trust:       #0891B2;
+  --trust-bg:    #ECFEFF;
+  --trust-bd:    #A5F3FC;
+  --pension:     #7C3AED;
+  --pension-bg:  #F5F3FF;
+  --pension-bd:  #DDD6FE;
+
+  --font:        'WonShinhan', 'Noto Sans KR', sans-serif;
+  --mono:        'DM Mono', monospace;
+
+  --shadow-sm:   0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
+  --shadow:      0 2px 8px rgba(0,0,0,.07), 0 1px 3px rgba(0,0,0,.05);
+  --shadow-md:   0 4px 16px rgba(0,0,0,.10), 0 2px 6px rgba(0,0,0,.06);
+  --shadow-lg:   0 8px 32px rgba(0,0,0,.14), 0 2px 8px rgba(0,0,0,.08);
+
+  --sidebar-w:   220px;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 14px;
+  min-height: 100vh;
+}
+
+/* 공통 유틸 */
+.mono { font-family: var(--mono); }
+
+/* 카테고리 배지 */
+.cat-chip { font-size:9px; padding:2px 6px; border-radius:4px; font-weight:600; }
+.cc-dom   { background:#ECFDF5; color:#065F46; }
+.cc-ovs   { background:#EEF3FF; color:#1E40AF; }
+.cc-bond  { background:#F5F3FF; color:#4C1D95; }
+.cc-alloc { background:#F0FDF4; color:#14532D; }
+.cc-rate  { background:#F0F9FF; color:#0C4A6E; }
+.cc-cm    { background:#FFF7ED; color:#9A3412; }
+.cc-real  { background:#FDF2F8; color:#9D174D; }
+.cc-cur   { background:#FAF5FF; color:#581C87; }
+.cc-etc   { background:#F9FAFB; color:#4B5563; }
+
+/* 가능 여부 배지 */
+.eb      { display:inline-flex; align-items:center; gap:3px; font-size:9px; font-weight:700; padding:2px 6px; border-radius:3px; }
+.eb-t    { background:var(--trust-bg); color:var(--trust); border:1px solid var(--trust-bd); }
+.eb-p    { background:var(--pension-bg); color:var(--pension); border:1px solid var(--pension-bd); }
+.eb-x    { background:#F9FAFB; color:var(--muted); border:1px solid var(--border); }
+
+/* 색상 유틸 */
+.up   { color: var(--up); }
+.dn   { color: var(--dn); }
+.gold { color: var(--gold); }
+.blue { color: var(--blue); }
+
+/* 애니메이션 */
+@keyframes fadeUp {
+  from { opacity:0; transform:translateY(10px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+.fade-up { animation: fadeUp .3s ease both; }
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+.spin { animation: spin .9s linear infinite; display:inline-block; }
+
+/* 스크롤바 */
+::-webkit-scrollbar { width:5px; }
+::-webkit-scrollbar-track { background:transparent; }
+::-webkit-scrollbar-thumb { background:var(--border2); border-radius:3px; }

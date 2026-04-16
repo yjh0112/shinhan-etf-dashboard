@@ -1,0 +1,11 @@
+.card   { background:var(--surface); border:1px solid var(--border); border-radius:12px; overflow:hidden; box-shadow:var(--shadow-sm); margin-bottom:32px; }
+.header { padding:14px 20px; border-bottom:1px solid var(--border); background:var(--surface2); display:flex; justify-content:space-between; align-items:center; }
+.title  { font-size:10px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--muted); }
+.hint   { font-size:10px; color:var(--muted); }
+.grid   { padding:16px; display:grid; grid-template-columns:repeat(5,1fr); gap:8px; }
+.cell   { border-radius:10px; padding:12px 10px; cursor:pointer; transition:all .14s; border:1px solid transparent; }
+.cell:hover { transform:scale(1.03); box-shadow:var(--shadow-md); }
+.code   { font-family:var(--mono); font-size:11px; font-weight:600; color:var(--text); margin-bottom:2px; }
+.name   { font-size:9px; color:var(--text2); margin-bottom:6px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.pct    { font-family:var(--mono); font-size:15px; font-weight:700; line-height:1; }
+.badges { display:flex; gap:3px; margin-top:5px; flex-wrap:wrap; }

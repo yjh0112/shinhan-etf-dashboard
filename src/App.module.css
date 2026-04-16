@@ -1,0 +1,55 @@
+.layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+.body {
+  margin-left: var(--sidebar-w);
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.main {
+  flex: 1;
+  padding: 28px 32px 48px;
+  max-width: 1400px;
+  width: 100%;
+}
+
+.footer {
+  padding: 18px 32px;
+  font-size: 11px;
+  color: var(--muted);
+  border-top: 1px solid var(--border);
+  background: var(--surface);
+}
+
+/* 빈 화면 */
+.emptyCard {
+  background: var(--surface);
+  border: 2px dashed var(--border2);
+  border-radius: 14px;
+  padding: 64px 32px;
+  text-align: center;
+  margin-bottom: 24px;
+}
+.emptyLogo {
+  width: 60px; height: 60px; border-radius: 14px;
+  background: linear-gradient(135deg, var(--gold), var(--gold-light));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 28px; font-weight: 700; font-style: italic; color: var(--navy);
+  margin: 0 auto 16px;
+  box-shadow: 0 6px 20px rgba(201,168,76,.35);
+}
+.emptyTitle { font-size: 17px; font-weight: 700; color: var(--text); margin-bottom: 8px; }
+.emptyDesc  { font-size: 12px; color: var(--text3); line-height: 1.8; max-width: 460px; margin: 0 auto 24px; }
+.emptyBtn {
+  padding: 10px 24px; border-radius: 8px; border: none;
+  background: var(--blue); color: #fff;
+  font-size: 13px; font-weight: 600; cursor: pointer;
+  font-family: var(--font); transition: all .15s;
+}
+.emptyBtn:hover { background: var(--blue-hover); box-shadow: var(--shadow-md); }

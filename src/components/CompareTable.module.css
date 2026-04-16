@@ -1,0 +1,22 @@
+.wrap  { background:var(--surface); border:1px solid var(--border); border-radius:12px; overflow:hidden; box-shadow:var(--shadow-sm); margin-bottom:32px; overflow-x:auto; }
+.table { width:100%; border-collapse:collapse; }
+.table th {
+  padding:10px 12px; text-align:left;
+  font-size:10px; font-weight:700; letter-spacing:1px; text-transform:uppercase;
+  color:var(--muted); background:var(--surface2);
+  border-bottom:2px solid var(--border); white-space:nowrap;
+}
+.table td { padding:10px 12px; border-bottom:1px solid rgba(232,234,237,.6); font-size:12px; }
+.table tr:last-child td { border-bottom:none; }
+.table tr:hover td { background:#F8F9FC; }
+
+.r      { text-align:right; font-family:var(--mono); }
+.center { text-align:center; }
+
+.n1 { font-weight:700; font-size:12px; color:var(--text); }
+.n2 { font-size:10px; color:var(--muted); margin-top:1px; }
+
+.pbadge {
+  display:inline-block; padding:2px 6px; border-radius:3px;
+  font-size:9px; font-weight:600; font-family:var(--mono); margin-right:2px;
+}

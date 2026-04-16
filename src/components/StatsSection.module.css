@@ -1,0 +1,22 @@
+.grid { display:grid; grid-template-columns:2fr 1fr 1fr; gap:18px; margin-bottom:32px; }
+.card { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:20px; box-shadow:var(--shadow-sm); }
+.cardTitle { font-size:10px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color:var(--muted); margin-bottom:16px; }
+
+.catRow   { display:flex; align-items:center; gap:10px; margin-bottom:11px; }
+.catLabel { font-size:11px; color:var(--text2); font-weight:500; min-width:76px; }
+.catTrack { flex:1; height:7px; background:var(--border); border-radius:4px; overflow:hidden; }
+.catFill  { height:100%; border-radius:4px; transition:width .6s ease; }
+.catVal   { font-family:var(--mono); font-size:10px; color:var(--muted); min-width:65px; text-align:right; }
+
+.donutWrap  { display:flex; justify-content:center; margin-bottom:14px; }
+.legendRow  { display:flex; align-items:center; margin-bottom:7px; }
+.legendDot  { width:8px; height:8px; border-radius:2px; flex-shrink:0; }
+.legendName { font-size:11px; color:var(--text2); flex:1; margin-left:8px; }
+.legendVal  { font-family:var(--mono); font-size:10px; color:var(--muted); }
+
+.mgrItem  { margin-bottom:10px; }
+.mgrTop   { display:flex; justify-content:space-between; margin-bottom:4px; }
+.mgrName  { font-size:11px; color:var(--text2); font-weight:600; }
+.mgrVal   { font-family:var(--mono); font-size:10px; color:var(--muted); }
+.mgrTrack { height:4px; background:var(--border); border-radius:2px; overflow:hidden; }
+.mgrFill  { height:100%; border-radius:2px; transition:width .6s ease; }
