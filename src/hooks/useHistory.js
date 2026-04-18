@@ -1,26 +1,12 @@
 /**
- * useHistory — 주차별 ETF 데이터 누적 관리
- *
- * localStorage 구조:
- * etf_history = [
- *   {
- *     date: "2026-04-13",        // 기준일 (일요일)
- *     week: "2026-W15",          // 주차 키
- *     top5w: [...],              // 주간 TOP5
- *     top5m: [...],              // 1개월 TOP5
- *     top5q: [...],              // 3개월 TOP5
- *     snapshot: [...],           // 전체 데이터 스냅샷 (레버리지 제외)
- *   },
- *   ...
- * ]
+ * useHistory — Supabase 기반 주차별 ETF 데이터 관리
+ * - 관리자가 업로드하면 Supabase DB에 저장
+ * - 모든 사용자가 같은 DB에서 데이터 읽어옴
  */
 
-import { useState, useCallback } from 'react'
+import { useState, useEffect, useCallback } from 'react'
+import { saveWeekToDB, loadHistoryFromDB } from '../utils/supabase.js'
 
-const STORAGE_KEY = 'etf_history'
-const MAX_WEEKS   = 52   // 최대 1년치 보관
-
-// ── 주차 키 계산 (ISO 주차) ──────────────────────────
 function getWeekKey(dateStr) {
   const d = new Date(dateStr)
   const jan4 = new Date(d.getFullYear(), 0, 4)
@@ -31,25 +17,6 @@ function getWeekKey(dateStr) {
   return `${d.getFullYear()}-W${String(week).padStart(2, '0')}`
 }
 
-// ── localStorage 로드 ────────────────────────────────
-function loadHistory() {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY)
-    if (!raw) return []
-    return JSON.parse(raw)
-  } catch { return [] }
-}
-
-// ── localStorage 저장 ────────────────────────────────
-function saveHistory(history) {
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(history))
-  } catch (e) {
-    console.warn('히스토리 저장 실패:', e)
-  }
-}
-
-// ── TOP5 추출 ────────────────────────────────────────
 function getTop5(data, key) {
   return [...data]
     .sort((a, b) => b[key] - a[key])
@@ -61,53 +28,66 @@ function getTop5(data, key) {
     }))
 }
 
-// ── TOP5 누적 랭킹 계산 ──────────────────────────────
 export function calcAccumRanking(history) {
-  // code → { name, cat, mgr, counts: {w, m, q}, weeks: [] }
   const map = {}
-
   history.forEach(entry => {
     const addToMap = (list, type) => {
-      list.forEach((etf, rank) => {
+      if (!list) return
+      list.forEach(etf => {
         if (!map[etf.code]) {
           map[etf.code] = {
             code: etf.code, name: etf.name,
             cat: etf.cat, mgr: etf.mgr,
             counts: { w: 0, m: 0, q: 0 },
-            total: 0,
-            weeks: [],
+            total: 0, weeks: [],
           }
         }
         map[etf.code].counts[type]++
         map[etf.code].total++
-        if (!map[etf.code].weeks.includes(entry.week)) {
-          map[etf.code].weeks.push(entry.week)
+        const wk = entry.week_key || entry.week
+        if (!map[etf.code].weeks.includes(wk)) {
+          map[etf.code].weeks.push(wk)
         }
       })
     }
-    if (entry.top5w) addToMap(entry.top5w, 'w')
-    if (entry.top5m) addToMap(entry.top5m, 'm')
-    if (entry.top5q) addToMap(entry.top5q, 'q')
+    addToMap(entry.top5w, 'w')
+    addToMap(entry.top5m, 'm')
+    addToMap(entry.top5q, 'q')
   })
-
   return Object.values(map).sort((a, b) => b.total - a.total)
 }
 
-// ── 훅 ──────────────────────────────────────────────
 export function useHistory() {
-  const [history, setHistoryState] = useState(() => loadHistory())
-
-  // 선택된 날짜 (null = 최신)
+  const [history,      setHistory]      = useState([])
+  const [loadingDB,    setLoadingDB]    = useState(true)
   const [selectedDate, setSelectedDate] = useState(null)
 
-  // 새 주차 데이터 저장
-  const saveWeek = useCallback((date, allData) => {
-    const week     = getWeekKey(date)
+  // ── 앱 시작 시 DB에서 히스토리 로드 ──────────────
+  useEffect(() => {
+    loadHistoryFromDB()
+      .then(rows => {
+        // DB 컬럼명을 내부 포맷으로 변환
+        const converted = rows.map(r => ({
+          date:     r.week_date,
+          week:     r.week_key,
+          week_key: r.week_key,
+          snapshot: r.snapshot,
+          top5w:    r.top5w,
+          top5m:    r.top5m,
+          top5q:    r.top5q,
+        }))
+        setHistory(converted)
+      })
+      .catch(err => console.error('DB 로드 실패:', err))
+      .finally(() => setLoadingDB(false))
+  }, [])
+
+  // ── 주간 데이터 저장 (관리자) ─────────────────────
+  const saveWeek = useCallback(async (date, allData) => {
+    const weekKey  = getWeekKey(date)
     const top5w    = getTop5(allData, 'w1')
     const top5m    = getTop5(allData, 'm1')
     const top5q    = getTop5(allData, 'm3')
-
-    // 전체 스냅샷 (용량 절약을 위해 핵심 필드만)
     const snapshot = allData.map(e => ({
       code: e.code, name: e.name, cat: e.cat, mgr: e.mgr,
       d1: e.d1, w1: e.w1, m1: e.m1, m3: e.m3,
@@ -117,31 +97,25 @@ export function useHistory() {
       top3: e.top3, t3r: e.t3r,
     }))
 
-    const newEntry = { date, week, top5w, top5m, top5q, snapshot }
+    // Supabase DB에 저장
+    await saveWeekToDB(date, weekKey, snapshot, top5w, top5m, top5q)
 
-    setHistoryState(prev => {
-      // 같은 주차 있으면 덮어쓰기
-      const filtered = prev.filter(e => e.week !== week)
-      const updated  = [newEntry, ...filtered]
-        .sort((a, b) => new Date(b.date) - new Date(a.date))
-        .slice(0, MAX_WEEKS)
-      saveHistory(updated)
-      return updated
+    // 로컬 상태도 업데이트
+    const newEntry = { date, week: weekKey, week_key: weekKey, snapshot, top5w, top5m, top5q }
+    setHistory(prev => {
+      const filtered = prev.filter(e => e.date !== date)
+      return [newEntry, ...filtered].sort((a, b) => new Date(b.date) - new Date(a.date))
     })
 
     return newEntry
   }, [])
 
-  // 선택된 날짜의 데이터 반환 (없으면 최신)
-  const currentEntry = selectedDate
+  const currentEntry  = selectedDate
     ? history.find(e => e.date === selectedDate) || history[0]
     : history[0]
 
-  // 누적 랭킹
-  const accumRanking = calcAccumRanking(history)
-
-  // 날짜 목록 (드롭다운용)
-  const dateList = history.map(e => ({ date: e.date, week: e.week }))
+  const accumRanking  = calcAccumRanking(history)
+  const dateList      = history.map(e => ({ date: e.date, week: e.week_key }))
 
   return {
     history,
@@ -152,5 +126,6 @@ export function useHistory() {
     saveWeek,
     accumRanking,
     hasHistory: history.length > 0,
+    loadingDB,
   }
 }

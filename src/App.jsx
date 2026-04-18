@@ -3,7 +3,6 @@ import { useEligibility }    from './hooks/useEligibility.js'
 import { useHistory }        from './hooks/useHistory.js'
 import Sidebar               from './components/Sidebar.jsx'
 import Topbar                from './components/Topbar.jsx'
-import LoaderCard            from './components/LoaderCard.jsx'
 import KpiStrip              from './components/KpiStrip.jsx'
 import Top5Panels            from './components/Top5Panels.jsx'
 import ConstituentPanel      from './components/ConstituentPanel.jsx'
@@ -11,6 +10,7 @@ import CompareTable          from './components/CompareTable.jsx'
 import StatsSection          from './components/StatsSection.jsx'
 import Heatmap               from './components/Heatmap.jsx'
 import AccumRanking          from './components/AccumRanking.jsx'
+import NewsSection           from './components/NewsSection.jsx'
 import EligibilityModal      from './components/EligibilityModal.jsx'
 import WeeklyUploadModal     from './components/WeeklyUploadModal.jsx'
 import DateSelector          from './components/DateSelector.jsx'
@@ -35,55 +35,54 @@ function useTop5(data) {
 }
 
 export default function App() {
-  const { trust, pension, setTrust, setPension, elig, matchCodes } = useEligibility()
+  const { trust, pension, setTrust, setPension, elig } = useEligibility()
   const {
     history, currentEntry, selectedDate, setSelectedDate,
-    dateList, saveWeek, accumRanking, hasHistory,
+    dateList, saveWeek, accumRanking, hasHistory, loadingDB,
   } = useHistory()
 
-  // 현재 보여줄 데이터 — 선택된 날짜의 스냅샷 or 빈 배열
   const currentData = currentEntry?.snapshot || []
-
-  // 로딩 상태 (업로드 전용)
-  const [uploadStatus, setUploadStatus] = useState(
-    hasHistory ? 'ok' : 'idle'
-  )
-
   const { top5w, top5m, top5q, allUnique } = useTop5(currentData)
+
   const [selectedCode, setSelectedCode] = useState(null)
   const effectiveCode = selectedCode || top5w[0]?.code || null
 
-  // 모달 상태
-  const [modalType,    setModalType]    = useState(null)
-  const [showUpload,   setShowUpload]   = useState(false)
+  const [modalType,  setModalType]  = useState(null)
+  const [showUpload, setShowUpload] = useState(false)
 
-  // 히스토리 있으면 자동으로 ok 상태
-  useEffect(() => {
-    if (hasHistory) setUploadStatus('ok')
-  }, [hasHistory])
-
-  // 가능 목록 저장
   const handleEligSave = useCallback(({ date, codes }) => {
     if (modalType === 'trust') setTrust({ date, codes })
     else setPension({ date, codes })
     setModalType(null)
   }, [modalType, setTrust, setPension])
 
-  // 주간 데이터 저장
-  const handleWeekSave = useCallback((date, parsedData) => {
-    saveWeek(date, parsedData)
+  const handleWeekSave = useCallback(async (date, parsedData) => {
+    await saveWeek(date, parsedData)
     setShowUpload(false)
-    setUploadStatus('ok')
-    setSelectedDate(null) // 최신 데이터로 전환
+    setSelectedDate(null)
   }, [saveWeek, setSelectedDate])
 
   const hasData = currentData.length > 0
 
+  // DB 로딩 중
+  if (loadingDB) {
+    return (
+      <div className={styles.layout}>
+        <Sidebar trust={trust} pension={pension} onOpenModal={setModalType} onOpenUpload={() => setShowUpload(true)} historyCount={0} />
+        <div className={styles.body}>
+          <div className={styles.dbLoading}>
+            <div className={styles.dbLoadingLogo}>𝑃</div>
+            <div className={styles.dbLoadingText}>데이터 불러오는 중...</div>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className={styles.layout}>
       <Sidebar
-        trust={trust}
-        pension={pension}
+        trust={trust} pension={pension}
         onOpenModal={setModalType}
         onOpenUpload={() => setShowUpload(true)}
         historyCount={history.length}
@@ -91,7 +90,7 @@ export default function App() {
 
       <div className={styles.body}>
         <Topbar
-          status={uploadStatus}
+          status={hasData ? 'ok' : 'idle'}
           loadedAt={currentEntry ? new Date(currentEntry.date) : null}
           onOpenUpload={() => setShowUpload(true)}
           onOpenModal={setModalType}
@@ -113,8 +112,8 @@ export default function App() {
               <div className={styles.emptyTitle}>첫 번째 주간 데이터를 업로드하세요</div>
               <div className={styles.emptyDesc}>
                 매주 일요일 funetf.co.kr에서 엑셀을 다운받아 업로드하면<br/>
-                대시보드가 자동으로 구성되고 데이터가 누적됩니다.<br/>
-                한 번 업로드하면 다음엔 자동으로 마지막 데이터가 표시됩니다.
+                대시보드가 자동으로 구성되고 <strong>모든 사용자가 함께 볼 수 있습니다.</strong><br/>
+                한 번 업로드하면 다음엔 자동으로 최신 데이터가 표시됩니다.
               </div>
               <button className={styles.emptyBtn} onClick={() => setShowUpload(true)}>
                 📅 지금 첫 데이터 업로드하기
@@ -125,7 +124,7 @@ export default function App() {
           {/* 대시보드 */}
           {hasData && (
             <>
-              {/* 현재 기준일 배너 */}
+              {/* 기준일 배너 */}
               {currentEntry && (
                 <div className={styles.currentBanner}>
                   <span className={styles.bannerDot} />
@@ -147,21 +146,12 @@ export default function App() {
 
               <SectionHeader id="sec-top" title="기간별 수익률 우수 ETF TOP 5"
                 desc={`${currentEntry?.date} 기준 · ${currentData.length}종목`} />
-              <Top5Panels
-                top5w={top5w} top5m={top5m} top5q={top5q}
-                selectedCode={effectiveCode}
-                onSelect={setSelectedCode}
-                elig={elig}
-              />
+              <Top5Panels top5w={top5w} top5m={top5m} top5q={top5q}
+                selectedCode={effectiveCode} onSelect={setSelectedCode} elig={elig} />
 
               <SectionHeader id="sec-const" title="우수 ETF 구성종목 현황" desc="상위 3개 구성종목" />
-              <ConstituentPanel
-                allUnique={allUnique}
-                selectedCode={effectiveCode}
-                onSelect={setSelectedCode}
-                allData={currentData}
-                elig={elig}
-              />
+              <ConstituentPanel allUnique={allUnique} selectedCode={effectiveCode}
+                onSelect={setSelectedCode} allData={currentData} elig={elig} />
 
               <SectionHeader id="sec-compare" title="우수 ETF 멀티기간 비교" desc="신탁·퇴직연금 가능 여부 포함" />
               <CompareTable allUnique={allUnique} elig={elig} />
@@ -173,13 +163,14 @@ export default function App() {
               <SectionHeader id="sec-heat" title="주간 수익률 TOP 15 히트맵" desc="레버리지·인버스 제외" />
               <Heatmap data={currentData} onSelect={setSelectedCode} elig={elig} />
 
-              {/* 누적 랭킹 */}
-              <SectionHeader
-                id="sec-accum"
-                title="TOP5 누적 랭킹"
-                desc={`${history.length}주 누적 · 매주 일요일 자동 업데이트`}
-              />
+              <SectionHeader id="sec-accum" title="TOP5 누적 랭킹"
+                desc={`${history.length}주 누적 · 매주 일요일 자동 업데이트`} />
               <AccumRanking ranking={accumRanking} totalWeeks={history.length} />
+
+              {/* ETF 주요뉴스 */}
+              <SectionHeader id="sec-news" title="ETF 주요뉴스"
+                desc="네이버 뉴스 실시간 검색" />
+              <NewsSection />
             </>
           )}
         </main>
@@ -190,21 +181,13 @@ export default function App() {
         </footer>
       </div>
 
-      {/* 모달들 */}
       {modalType && (
-        <EligibilityModal
-          type={modalType}
+        <EligibilityModal type={modalType}
           existing={modalType === 'trust' ? trust : pension}
-          etfData={currentData}
-          onSave={handleEligSave}
-          onClose={() => setModalType(null)}
-        />
+          etfData={currentData} onSave={handleEligSave} onClose={() => setModalType(null)} />
       )}
       {showUpload && (
-        <WeeklyUploadModal
-          onSave={handleWeekSave}
-          onClose={() => setShowUpload(false)}
-        />
+        <WeeklyUploadModal onSave={handleWeekSave} onClose={() => setShowUpload(false)} />
       )}
     </div>
   )

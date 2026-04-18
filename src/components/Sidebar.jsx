@@ -8,6 +8,7 @@ const NAV_ITEMS = [
   { id: 'stats',   icon: '📈', label: '전체 통계' },
   { id: 'heat',    icon: '🌡', label: '수익률 히트맵' },
   { id: 'accum',   icon: '🏆', label: 'TOP5 누적 랭킹' },
+  { id: 'news',    icon: '📰', label: 'ETF 주요뉴스' },
 ]
 
 export default function Sidebar({ trust, pension, onOpenModal, onOpenUpload, historyCount }) {
@@ -32,6 +33,9 @@ export default function Sidebar({ trust, pension, onOpenModal, onOpenUpload, his
             <span>{item.label}</span>
             {item.id === 'accum' && historyCount > 0 && (
               <span className={styles.badge}>{historyCount}주</span>
+            )}
+            {item.id === 'news' && (
+              <span className={styles.newBadge}>NEW</span>
             )}
           </button>
         ))}

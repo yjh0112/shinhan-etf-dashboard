@@ -1,7 +1,21 @@
-.layout {
-  display: flex;
-  min-height: 100vh;
+.dbLoading {
+  flex: 1; display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 16px; min-height: 100vh;
 }
+.dbLoadingLogo {
+  width: 56px; height: 56px; border-radius: 14px;
+  background: linear-gradient(135deg, var(--gold), var(--gold-light));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 26px; font-weight: 700; font-style: italic; color: var(--navy);
+  box-shadow: 0 6px 20px rgba(201,168,76,.35);
+  animation: pulse 1.5s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%,100% { transform: scale(1); }
+  50%      { transform: scale(1.05); }
+}
+.dbLoadingText { font-size: 14px; color: var(--muted); font-weight: 500; }
 
 .body {
   margin-left: var(--sidebar-w);
