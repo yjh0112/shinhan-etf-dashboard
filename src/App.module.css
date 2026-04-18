@@ -14,7 +14,7 @@
 
 .main {
   flex: 1;
-  padding: 28px 32px 48px;
+  padding: 24px 32px 48px;
   max-width: 1400px;
   width: 100%;
 }
@@ -26,6 +26,51 @@
   border-top: 1px solid var(--border);
   background: var(--surface);
 }
+
+/* 현재 기준일 배너 — 크고 명확하게 */
+.currentBanner {
+  display: flex; align-items: center; gap: 16px;
+  background: linear-gradient(135deg, #0a1628 0%, #1a3055 100%);
+  border-radius: 12px;
+  padding: 14px 22px;
+  margin-bottom: 24px;
+  box-shadow: 0 4px 16px rgba(10,22,40,.2);
+}
+.bannerDot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--gold);
+  box-shadow: 0 0 8px rgba(201,168,76,.6);
+  flex-shrink: 0;
+  animation: glowPulse 2s infinite;
+}
+@keyframes glowPulse {
+  0%,100% { box-shadow: 0 0 8px rgba(201,168,76,.6); }
+  50%      { box-shadow: 0 0 3px rgba(201,168,76,.2); }
+}
+.bannerDateLabel {
+  font-size: 10px; font-weight: 700; letter-spacing: 2px;
+  text-transform: uppercase; color: var(--gold); margin-right: 2px;
+}
+.bannerDateValue {
+  font-family: var(--mono); font-size: 18px; font-weight: 700;
+  color: #fff; letter-spacing: 0.5px;
+}
+.bannerText { font-size: 12px; color: rgba(255,255,255,.5); margin-left: 4px; }
+.bannerRight {
+  margin-left: auto; font-family: var(--mono); font-size: 11px;
+  color: rgba(255,255,255,.4);
+}
+.backToLatest {
+  margin-left: 12px;
+  background: rgba(26,86,255,.25);
+  border: 1px solid rgba(26,86,255,.4);
+  color: #93C5FD;
+  font-size: 11px; font-weight: 600;
+  cursor: pointer; font-family: var(--font);
+  padding: 4px 10px; border-radius: 5px;
+  transition: all .14s;
+}
+.backToLatest:hover { background: rgba(26,86,255,.4); color:#fff; }
 
 /* 빈 화면 */
 .emptyCard {
@@ -45,11 +90,11 @@
   box-shadow: 0 6px 20px rgba(201,168,76,.35);
 }
 .emptyTitle { font-size: 17px; font-weight: 700; color: var(--text); margin-bottom: 8px; }
-.emptyDesc  { font-size: 12px; color: var(--text3); line-height: 1.8; max-width: 460px; margin: 0 auto 24px; }
+.emptyDesc  { font-size: 12px; color: var(--text3); line-height: 1.9; max-width: 460px; margin: 0 auto 24px; }
 .emptyBtn {
-  padding: 10px 24px; border-radius: 8px; border: none;
+  padding: 11px 28px; border-radius: 8px; border: none;
   background: var(--blue); color: #fff;
-  font-size: 13px; font-weight: 600; cursor: pointer;
+  font-size: 13px; font-weight: 700; cursor: pointer;
   font-family: var(--font); transition: all .15s;
 }
 .emptyBtn:hover { background: var(--blue-hover); box-shadow: var(--shadow-md); }
