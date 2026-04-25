@@ -8,6 +8,7 @@ const NAV_ITEMS = [
   { id: 'stats',   icon: '📈', label: '전체 통계' },
   { id: 'heat',    icon: '🌡', label: '수익률 히트맵' },
   { id: 'accum',   icon: '🏆', label: 'TOP5 누적 랭킹' },
+  { id: 'search',  icon: '🔎', label: 'ETF 검색' },
   { id: 'news',    icon: '📰', label: 'ETF 주요뉴스' },
 ]
 

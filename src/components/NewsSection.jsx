@@ -1,17 +1,29 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import styles from './NewsSection.module.css'
 
-const NEWS_KEYWORDS = ['ETF', 'KODEX', 'TIGER ETF', '국내 ETF', 'ETF 수익률']
+/**
+ * ETF 뉴스 섹션
+ * - 구글 뉴스 RSS → allorigins 프록시 → XML 파싱
+ * - CORS 문제 없음, API 키 불필요, 무료
+ */
 
-function stripHtml(str) {
-  return str?.replace(/<[^>]*>/g, '')
-    .replace(/&quot;/g, '"')
-    .replace(/&amp;/g, '&')
-    .replace(/&#039;/g, "'") || ''
-}
+const PROXY = 'https://api.allorigins.win/raw?url='
 
-function timeAgo(pubDate) {
-  const diff = Date.now() - new Date(pubDate).getTime()
+// 구글 뉴스 RSS (키워드 검색)
+const makeRssUrl = (keyword) =>
+  `https://news.google.com/rss/search?q=${encodeURIComponent(keyword)}&hl=ko&gl=KR&ceid=KR:ko`
+
+const KEYWORDS = [
+  { label: 'ETF 전체',   query: 'ETF 국내' },
+  { label: 'KODEX',      query: 'KODEX ETF' },
+  { label: 'TIGER',      query: 'TIGER ETF' },
+  { label: '채권 ETF',   query: '채권 ETF 금리' },
+  { label: '해외주식ETF', query: '해외주식 ETF S&P' },
+  { label: '퇴직연금ETF', query: '퇴직연금 ETF' },
+]
+
+function timeAgo(dateStr) {
+  const diff = Date.now() - new Date(dateStr).getTime()
   const min  = Math.floor(diff / 60000)
   const hour = Math.floor(diff / 3600000)
   const day  = Math.floor(diff / 86400000)
@@ -20,124 +32,115 @@ function timeAgo(pubDate) {
   return `${day}일 전`
 }
 
-// Claude API를 통해 네이버 뉴스 검색
-async function fetchNewsViaClaude(keyword) {
-  const prompt = `네이버 뉴스에서 "${keyword}" 키워드로 최신 뉴스 5개를 검색해서 아래 JSON 형식으로만 반환해주세요. 다른 설명은 절대 하지 마세요.
+function parseRSS(xmlText) {
+  const parser = new DOMParser()
+  const doc    = parser.parseFromString(xmlText, 'text/xml')
+  const items  = Array.from(doc.querySelectorAll('item'))
 
-[
-  {
-    "title": "뉴스 제목",
-    "description": "뉴스 요약 (2-3문장)",
-    "source": "언론사명",
-    "pubDate": "2026-04-18T09:00:00",
-    "link": "https://..."
-  }
-]
+  return items.slice(0, 8).map(item => {
+    const title   = item.querySelector('title')?.textContent || ''
+    const link    = item.querySelector('link')?.textContent || ''
+    const pubDate = item.querySelector('pubDate')?.textContent || ''
+    const source  = item.querySelector('source')?.textContent || ''
+    const desc    = item.querySelector('description')?.textContent || ''
 
-오늘 날짜 기준 최신 ETF 관련 뉴스를 실제로 검색해서 넣어주세요.`
+    // HTML 태그 제거
+    const cleanDesc = desc.replace(/<[^>]*>/g, '').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&amp;/g,'&').trim()
+    const cleanTitle = title.replace(/<[^>]*>/g,'').trim()
 
-  const res = await fetch('https://api.anthropic.com/v1/messages', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      model: 'claude-sonnet-4-20250514',
-      max_tokens: 2000,
-      tools: [{ type: 'web_search_20250305', name: 'web_search' }],
-      messages: [{ role: 'user', content: prompt }]
-    })
+    return { title: cleanTitle, link, pubDate, source, desc: cleanDesc }
   })
-
-  const data = await res.json()
-  const text = data.content?.map(c => c.text || '').join('') || ''
-  const match = text.match(/\[[\s\S]*\]/)
-  if (!match) return []
-  return JSON.parse(match[0])
 }
 
 export default function NewsSection() {
-  const [keyword, setKeyword] = useState('ETF')
+  const [kwIdx,   setKwIdx]   = useState(0)
   const [news,    setNews]    = useState([])
   const [loading, setLoading] = useState(false)
   const [error,   setError]   = useState(null)
+  const [lastFetch, setLastFetch] = useState(null)
 
-  const fetchNews = async (kw) => {
+  const fetchNews = useCallback(async (idx) => {
     setLoading(true)
     setError(null)
-    setNews([])
     try {
-      const items = await fetchNewsViaClaude(kw)
-      if (!items.length) setError('검색 결과가 없습니다')
+      const rssUrl = makeRssUrl(KEYWORDS[idx].query)
+      const proxyUrl = PROXY + encodeURIComponent(rssUrl)
+      const res = await fetch(proxyUrl, { signal: AbortSignal.timeout(15000) })
+      if (!res.ok) throw new Error(`HTTP ${res.status}`)
+      const text = await res.text()
+      const items = parseRSS(text)
+      if (!items.length) throw new Error('뉴스를 불러오지 못했습니다')
       setNews(items)
+      setLastFetch(new Date())
     } catch (e) {
+      setError('뉴스 로드 실패 — 잠시 후 다시 시도해주세요')
       console.error(e)
-      setError('뉴스를 불러오지 못했습니다. 잠시 후 다시 시도해주세요.')
     } finally {
       setLoading(false)
     }
-  }
+  }, [])
 
-  useEffect(() => { fetchNews(keyword) }, [keyword])
+  useEffect(() => { fetchNews(kwIdx) }, [kwIdx, fetchNews])
 
   return (
     <div className={styles.wrap}>
       {/* 키워드 탭 */}
       <div className={styles.tabs}>
-        {NEWS_KEYWORDS.map(kw => (
+        {KEYWORDS.map((kw, i) => (
           <button
-            key={kw}
-            className={`${styles.tab} ${keyword === kw ? styles.active : ''}`}
-            onClick={() => setKeyword(kw)}
+            key={kw.label}
+            className={`${styles.tab} ${kwIdx === i ? styles.active : ''}`}
+            onClick={() => setKwIdx(i)}
           >
-            {kw}
+            {kw.label}
           </button>
         ))}
-        <button className={styles.refreshBtn} onClick={() => fetchNews(keyword)}>
+        <button className={styles.refreshBtn} onClick={() => fetchNews(kwIdx)}>
           🔄 새로고침
         </button>
+        {lastFetch && (
+          <span className={styles.lastFetch}>
+            {lastFetch.toLocaleTimeString('ko-KR', { hour:'2-digit', minute:'2-digit' })} 기준
+          </span>
+        )}
       </div>
 
       {/* 로딩 */}
       {loading && (
-        <div className={styles.loadingWrap}>
-          <span className="spin">⟳</span>&nbsp; 뉴스 검색 중... (10~20초 소요)
+        <div className={styles.loading}>
+          <span className="spin">⟳</span> &nbsp;뉴스 불러오는 중...
         </div>
       )}
 
       {/* 에러 */}
-      {error && !loading && (
-        <div className={styles.errorBox}>{error}</div>
+      {!loading && error && (
+        <div className={styles.error}>{error}</div>
       )}
 
       {/* 뉴스 카드 */}
-      {!loading && !error && news.length > 0 && (
+      {!loading && !error && (
         <div className={styles.grid}>
           {news.map((item, i) => (
             <a
               key={i}
-              href={item.link || '#'}
+              href={item.link}
               target="_blank"
               rel="noreferrer"
               className={styles.card}
             >
               <div className={styles.cardTop}>
                 <span className={styles.source}>{item.source || '뉴스'}</span>
-                <span className={styles.time}>
-                  {item.pubDate ? timeAgo(item.pubDate) : '최신'}
-                </span>
+                <span className={styles.time}>{item.pubDate ? timeAgo(item.pubDate) : ''}</span>
               </div>
-              <div className={styles.title}>{stripHtml(item.title)}</div>
-              <div className={styles.desc}>{stripHtml(item.description)}</div>
+              <div className={styles.title}>{item.title}</div>
+              {item.desc && <div className={styles.desc}>{item.desc.substring(0, 100)}</div>}
             </a>
           ))}
         </div>
       )}
 
-      {!loading && !error && news.length === 0 && (
-        <div className={styles.empty}>검색 결과가 없습니다</div>
-      )}
-
       <div className={styles.footer}>
-        AI 웹 검색 기반 · 실시간 뉴스
+        출처: Google 뉴스 · 클릭 시 원문으로 이동
       </div>
     </div>
   )

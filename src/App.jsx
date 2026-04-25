@@ -11,6 +11,7 @@ import StatsSection          from './components/StatsSection.jsx'
 import Heatmap               from './components/Heatmap.jsx'
 import AccumRanking          from './components/AccumRanking.jsx'
 import NewsSection           from './components/NewsSection.jsx'
+import EtfSearch             from './components/EtfSearch.jsx'
 import EligibilityModal      from './components/EligibilityModal.jsx'
 import WeeklyUploadModal     from './components/WeeklyUploadModal.jsx'
 import DateSelector          from './components/DateSelector.jsx'
@@ -19,18 +20,27 @@ import styles                from './App.module.css'
 
 function useTop5(data) {
   return useMemo(() => {
-    if (!data.length) return { top5w:[], top5m:[], top5q:[], allUnique:[] }
-    const top5w = [...data].sort((a,b)=>b.w1-a.w1).slice(0,5)
-    const top5m = [...data].sort((a,b)=>b.m1-a.m1).slice(0,5)
-    const top5q = [...data].sort((a,b)=>b.m3-a.m3).slice(0,5)
+    if (!data.length) return { top5w:[], top5m:[], top5q:[], top5m6:[], top5ytd:[], top5y1:[], allUnique:[] }
+    const top5w   = [...data].sort((a,b)=>b.w1-a.w1).slice(0,5)
+    const top5m   = [...data].sort((a,b)=>b.m1-a.m1).slice(0,5)
+    const top5q   = [...data].sort((a,b)=>b.m3-a.m3).slice(0,5)
+    const top5m6  = [...data].sort((a,b)=>b.m6-a.m6).slice(0,5)
+    const top5ytd = [...data].sort((a,b)=>b.ytd-a.ytd).slice(0,5)
+    const top5y1  = [...data].sort((a,b)=>b.y1-a.y1).slice(0,5)
+
+    // 6개 기간 전체 합산으로 unique 목록 생성
     const map = new Map()
-    ;[[top5w,'w'],[top5m,'m'],[top5q,'q']].forEach(([list,p])=>
+    ;[
+      [top5w,'w'],[top5m,'m'],[top5q,'q'],
+      [top5m6,'m6'],[top5ytd,'ytd'],[top5y1,'y1'],
+    ].forEach(([list,p])=>
       list.forEach(e=>{
         if(!map.has(e.code)) map.set(e.code,{...e,periods:[]})
-        map.get(e.code).periods.push(p)
+        if(!map.get(e.code).periods.includes(p))
+          map.get(e.code).periods.push(p)
       })
     )
-    return { top5w, top5m, top5q, allUnique:[...map.values()] }
+    return { top5w, top5m, top5q, top5m6, top5ytd, top5y1, allUnique:[...map.values()] }
   }, [data])
 }
 
@@ -42,7 +52,7 @@ export default function App() {
   } = useHistory()
 
   const currentData = currentEntry?.snapshot || []
-  const { top5w, top5m, top5q, allUnique } = useTop5(currentData)
+  const { top5w, top5m, top5q, top5m6, top5ytd, top5y1, allUnique } = useTop5(currentData)
 
   const [selectedCode, setSelectedCode] = useState(null)
   const effectiveCode = selectedCode || top5w[0]?.code || null
@@ -146,8 +156,11 @@ export default function App() {
 
               <SectionHeader id="sec-top" title="기간별 수익률 우수 ETF TOP 5"
                 desc={`${currentEntry?.date} 기준 · ${currentData.length}종목`} />
-              <Top5Panels top5w={top5w} top5m={top5m} top5q={top5q}
-                selectedCode={effectiveCode} onSelect={setSelectedCode} elig={elig} />
+              <Top5Panels
+                top5w={top5w} top5m={top5m} top5q={top5q}
+                top5m6={top5m6} top5ytd={top5ytd} top5y1={top5y1}
+                selectedCode={effectiveCode} onSelect={setSelectedCode} elig={elig}
+              />
 
               <SectionHeader id="sec-const" title="우수 ETF 구성종목 현황" desc="상위 3개 구성종목" />
               <ConstituentPanel allUnique={allUnique} selectedCode={effectiveCode}
@@ -166,6 +179,11 @@ export default function App() {
               <SectionHeader id="sec-accum" title="TOP5 누적 랭킹"
                 desc={`${history.length}주 누적 · 매주 일요일 자동 업데이트`} />
               <AccumRanking ranking={accumRanking} totalWeeks={history.length} />
+
+              {/* ETF 검색 */}
+              <SectionHeader id="sec-search" title="ETF 검색"
+                desc={`${currentData.length}종목 즉시검색 · 없으면 AI가 찾아드립니다`} />
+              <EtfSearch allData={currentData} elig={elig} />
 
               {/* ETF 주요뉴스 */}
               <SectionHeader id="sec-news" title="ETF 주요뉴스"
