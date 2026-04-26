@@ -1,0 +1,66 @@
+.wrap { margin-bottom: 32px; }
+
+.header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 16px;
+}
+.headerLeft { display: flex; align-items: center; gap: 12px; }
+.headerTitle { font-size: 14px; font-weight: 700; color: var(--text); }
+.updateTime  { font-family: var(--mono); font-size: 10px; color: var(--muted); }
+.refreshBtn  {
+  padding: 5px 12px; border-radius: 7px; border: 1px solid var(--border2);
+  background: var(--surface); color: var(--text3); font-size: 11px;
+  cursor: pointer; transition: all .14s; font-family: var(--font);
+}
+.refreshBtn:hover    { border-color: var(--blue); color: var(--blue); }
+.refreshBtn:disabled { opacity: .5; cursor: not-allowed; }
+
+.catSection  { margin-bottom: 16px; }
+.catLabel    {
+  font-size: 10px; font-weight: 700; letter-spacing: 2px;
+  text-transform: uppercase; color: var(--muted);
+  margin-bottom: 8px; padding-left: 2px;
+}
+.grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
+
+/* 카드 */
+.card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 10px; padding: 14px 16px; position: relative;
+  overflow: hidden; box-shadow: var(--shadow-sm);
+  transition: box-shadow .15s, transform .12s;
+}
+.card:hover { box-shadow: var(--shadow-md); transform: translateY(-1px); }
+
+.accent {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  height: 3px; border-radius: 0 0 10px 10px;
+}
+
+.cardTop {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 8px;
+}
+.cardLabel { font-size: 11px; font-weight: 700; color: var(--text2); }
+.cardCat   {
+  font-size: 9px; color: var(--muted);
+  background: var(--surface2); padding: 1px 6px; border-radius: 4px;
+}
+
+.price {
+  font-family: var(--mono); font-size: 18px; font-weight: 700;
+  line-height: 1; margin-bottom: 4px;
+}
+.change { font-family: var(--mono); font-size: 10px; margin-bottom: 4px; }
+.time   { font-family: var(--mono); font-size: 9px; color: var(--muted); }
+
+.up { color: var(--up); }
+.dn { color: var(--dn); }
+
+.loading { font-size: 18px; color: var(--muted); padding: 8px 0; }
+.noData  { font-size: 16px; color: var(--muted); padding: 8px 0; }
+
+.footer {
+  font-size: 10px; color: var(--muted);
+  text-align: right; margin-top: 4px;
+}
