@@ -104,7 +104,31 @@
 .exampleBtn:hover { border-color: var(--blue); color: var(--blue); background: var(--blue-light); }
 .guideDesc { font-size: 11px; color: var(--muted); }
 
-/* ── 상세 카드 ── */
+/* ── 요약 설명 3줄 ── */
+.descSection {
+  padding: 16px 24px;
+  background: #F8F9FC;
+  border-bottom: 1px solid var(--border);
+  display: flex; flex-direction: column; gap: 8px;
+}
+.descItem {
+  font-size: 12px; color: var(--text2); line-height: 1.7;
+  padding-left: 14px; position: relative;
+}
+.descItem::before {
+  content: ''; position: absolute; left: 0; top: 8px;
+  width: 5px; height: 5px; border-radius: 50%;
+  background: var(--blue);
+}
+.descNote::before { background: var(--gold); }
+.descNote { color: var(--text3); }
+
+.enrichingBox {
+  padding: 12px 24px;
+  background: var(--blue-light); border-bottom: 1px solid #BFDBFE;
+  font-size: 12px; color: #1E40AF;
+}
+.enrichingHint { font-size: 10px; color: var(--muted); font-weight: 400; }
 .detailCard {
   background: var(--surface); border: 1.5px solid var(--blue);
   border-radius: 14px; overflow: hidden;
