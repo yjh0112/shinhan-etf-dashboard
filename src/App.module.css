@@ -14,6 +14,8 @@
 .backBtn:hover { border-color:var(--blue); color:var(--blue); }
 .breadcrumb { font-size:12px; color:var(--muted); display:flex; align-items:center; gap:6px; }
 .breadcrumb strong { color:var(--text); }
+
+.dbLoading {
   flex: 1; display: flex; flex-direction: column;
   align-items: center; justify-content: center;
   gap: 16px; min-height: 100vh;
