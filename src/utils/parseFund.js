@@ -37,8 +37,20 @@ export function parseFundWorkbook(buffer) {
   const idx = {}
   hdr.forEach((h, i) => { if (h) idx[h] = i })
 
-  // 2행(인덱ス1)은 서브헤더 — 건너뜀
-  const rows = raw.slice(2).filter(r => r[idx['펀드코드']])
+  // 2행(인덱스1)은 서브헤더 — 건너뜀
+  // 레버리지·인버스 제외 (펀드명 또는 소유형 기준)
+  const EXCLUDE_KEYWORDS = ['레버리지', '인버스', '2배', '2X', '2x', '-1x', '-2x', 'Short', 'Bear']
+  const isExcluded = (name, cat2) => {
+    const text = (name + ' ' + cat2).toLowerCase()
+    return EXCLUDE_KEYWORDS.some(k => text.includes(k.toLowerCase()))
+  }
+
+  const rows = raw.slice(2).filter(r => {
+    if (!r[idx['펀드코드']]) return false
+    const name = r[idx['펀드명']] || ''
+    const cat2 = r[idx['펀드 소유형']] || ''
+    return !isExcluded(name, cat2)
+  })
 
   // 기본명 기준 그룹화
   const groupMap = new Map()

@@ -69,7 +69,22 @@
   cursor: pointer; transition: background .15s;
   border: none; width: 100%; font-family: var(--font);
 }
-.badge {
+.backToMain {
+  display: flex; align-items: center; gap: 8px;
+  width: 100%; padding: 8px 12px; border-radius: 8px;
+  background: rgba(255,255,255,.07);
+  border: 1px solid rgba(255,255,255,.12);
+  color: rgba(255,255,255,.7);
+  font-size: 12px; font-weight: 600;
+  cursor: pointer; transition: all .15s;
+  font-family: var(--font); text-align: left;
+  margin-bottom: 4px;
+}
+.backToMain:hover {
+  background: rgba(255,255,255,.14);
+  color: #fff;
+  border-color: rgba(255,255,255,.25);
+}
   margin-left:auto; background:var(--gold); color:var(--navy);
   font-family:var(--mono); font-size:9px; font-weight:700;
   padding:2px 6px; border-radius:10px;

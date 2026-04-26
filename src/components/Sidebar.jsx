@@ -12,24 +12,27 @@ const NAV_ITEMS = [
   { id: 'news',    icon: '📰', label: 'ETF 주요뉴스' },
 ]
 
-export default function Sidebar({ trust, pension, onOpenModal, onOpenUpload, historyCount }) {
+export default function Sidebar({ trust, pension, onOpenModal, onOpenUpload, historyCount, onBack }) {
   const scrollTo = (id) => {
     document.getElementById('sec-' + id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
   }
 
   return (
     <nav className={styles.sidebar}>
-      <div className={styles.logo}>
-        <img
-          src="./images/logo-gold-vertical.png"
-          alt="신한 Premier"
-          className={styles.logoImg}
-        />
+      {/* 로고 — 클릭 시 메인으로 */}
+      <div className={styles.logo} onClick={onBack} style={{ cursor: 'pointer' }} title="메인 화면으로">
+        <img src="./images/logo-gold-vertical.png" alt="신한 Premier" className={styles.logoImg} />
         <div className={styles.logoDivider} />
       </div>
 
       <div className={styles.nav}>
-        <div className={styles.navLabel}>메뉴</div>
+        {/* 메인으로 버튼 */}
+        <button className={styles.backToMain} onClick={onBack}>
+          <span>←</span>
+          <span>메인 화면으로</span>
+        </button>
+
+        <div className={styles.navLabel} style={{ marginTop: 8 }}>메뉴</div>
         {NAV_ITEMS.map(item => (
           <button key={item.id} className={styles.navItem} onClick={() => scrollTo(item.id)}>
             <span className={styles.navIcon}>{item.icon}</span>
@@ -38,7 +41,7 @@ export default function Sidebar({ trust, pension, onOpenModal, onOpenUpload, his
               <span className={styles.badge}>{historyCount}주</span>
             )}
             {item.id === 'news' && (
-              <span className={styles.newBadge}>NEW</span>
+              <span className={styles.newBadge}>LIVE</span>
             )}
           </button>
         ))}
