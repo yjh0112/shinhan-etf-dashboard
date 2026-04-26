@@ -20,9 +20,11 @@ export default function Sidebar({ trust, pension, onOpenModal, onOpenUpload, his
   return (
     <nav className={styles.sidebar}>
       <div className={styles.logo}>
-        <div className={styles.logoMark}>𝑃</div>
-        <div className={styles.logoTitle}>Shinhan Premier</div>
-        <div className={styles.logoSub}>Pathfinder Platform</div>
+        <img
+          src="./images/logo-gold-vertical.png"
+          alt="신한 Premier"
+          className={styles.logoImg}
+        />
         <div className={styles.logoDivider} />
       </div>
 

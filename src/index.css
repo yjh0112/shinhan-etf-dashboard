@@ -8,9 +8,9 @@
 
 /* ── Shinhan Premier Design Tokens ── */
 :root {
-  --navy:        #0a1628;
-  --navy-mid:    #112040;
-  --navy-light:  #1a3055;
+  --navy:        #2D2F56;   /* 신한 프리미어 퍼플네이비 */
+  --navy-mid:    #3A3D6E;
+  --navy-light:  #464980;
   --gold:        #C9A84C;
   --gold-light:  #E2C97E;
   --blue:        #1A56FF;

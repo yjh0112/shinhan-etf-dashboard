@@ -3,17 +3,14 @@
   align-items: center; justify-content: center;
   gap: 16px; min-height: 100vh;
 }
-.dbLoadingLogo {
-  width: 56px; height: 56px; border-radius: 14px;
-  background: linear-gradient(135deg, var(--gold), var(--gold-light));
-  display: flex; align-items: center; justify-content: center;
-  font-size: 26px; font-weight: 700; font-style: italic; color: var(--navy);
-  box-shadow: 0 6px 20px rgba(201,168,76,.35);
+.dbLoadingLogoImg {
+  width: 120px; height: auto;
   animation: pulse 1.5s ease-in-out infinite;
+  filter: drop-shadow(0 4px 12px rgba(201,168,76,.4));
 }
 @keyframes pulse {
-  0%,100% { transform: scale(1); }
-  50%      { transform: scale(1.05); }
+  0%,100% { transform: scale(1); opacity: 1; }
+  50%      { transform: scale(1.05); opacity: .85; }
 }
 .dbLoadingText { font-size: 14px; color: var(--muted); font-weight: 500; }
 
@@ -44,11 +41,11 @@
 /* 현재 기준일 배너 — 크고 명확하게 */
 .currentBanner {
   display: flex; align-items: center; gap: 16px;
-  background: linear-gradient(135deg, #0a1628 0%, #1a3055 100%);
+  background: linear-gradient(135deg, #2D2F56 0%, #3A3D6E 100%);
   border-radius: 12px;
   padding: 14px 22px;
   margin-bottom: 24px;
-  box-shadow: 0 4px 16px rgba(10,22,40,.2);
+  box-shadow: 0 4px 16px rgba(45,47,86,.25);
 }
 .bannerDot {
   width: 8px; height: 8px; border-radius: 50%;
@@ -95,13 +92,11 @@
   text-align: center;
   margin-bottom: 24px;
 }
-.emptyLogo {
-  width: 60px; height: 60px; border-radius: 14px;
-  background: linear-gradient(135deg, var(--gold), var(--gold-light));
-  display: flex; align-items: center; justify-content: center;
-  font-size: 28px; font-weight: 700; font-style: italic; color: var(--navy);
-  margin: 0 auto 16px;
-  box-shadow: 0 6px 20px rgba(201,168,76,.35);
+.emptyLogoImg {
+  width: 130px; height: auto;
+  margin: 0 auto 20px;
+  display: block;
+  filter: drop-shadow(0 4px 12px rgba(201,168,76,.3));
 }
 .emptyTitle { font-size: 17px; font-weight: 700; color: var(--text); margin-bottom: 8px; }
 .emptyDesc  { font-size: 12px; color: var(--text3); line-height: 1.9; max-width: 460px; margin: 0 auto 24px; }

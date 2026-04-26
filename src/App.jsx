@@ -81,7 +81,7 @@ export default function App() {
         <Sidebar trust={trust} pension={pension} onOpenModal={setModalType} onOpenUpload={() => setShowUpload(true)} historyCount={0} />
         <div className={styles.body}>
           <div className={styles.dbLoading}>
-            <div className={styles.dbLoadingLogo}>𝑃</div>
+            <img src="./images/logo-gold-vertical.png" alt="신한 Premier" className={styles.dbLoadingLogoImg} />
             <div className={styles.dbLoadingText}>데이터 불러오는 중...</div>
           </div>
         </div>
@@ -118,7 +118,7 @@ export default function App() {
           {/* 데이터 없을 때 */}
           {!hasData && (
             <div className={styles.emptyCard}>
-              <div className={styles.emptyLogo}>𝑃</div>
+              <img src="./images/logo-gold-vertical.png" alt="신한 Premier" className={styles.emptyLogoImg} />
               <div className={styles.emptyTitle}>첫 번째 주간 데이터를 업로드하세요</div>
               <div className={styles.emptyDesc}>
                 매주 일요일 funetf.co.kr에서 엑셀을 다운받아 업로드하면<br/>
