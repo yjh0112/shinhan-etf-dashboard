@@ -5,51 +5,46 @@ const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZ
 
 export const supabase = createClient(SUPABASE_URL, SUPABASE_KEY)
 
-// ── 주간 데이터 저장 (관리자) ─────────────────────
+// ── ETF 히스토리 ──────────────────────────────────────
 export async function saveWeekToDB(date, weekKey, snapshot, top5w, top5m, top5q) {
   const { error } = await supabase
     .from('etf_history')
-    .upsert({
-      week_date: date,
-      week_key:  weekKey,
-      snapshot:  snapshot,
-      top5w:     top5w,
-      top5m:     top5m,
-      top5q:     top5q,
-    }, { onConflict: 'week_date' })
-
+    .upsert({ week_date:date, week_key:weekKey, snapshot, top5w, top5m, top5q }, { onConflict:'week_date' })
   if (error) throw error
 }
 
-// ── 전체 히스토리 불러오기 (모든 사용자) ──────────
 export async function loadHistoryFromDB() {
   const { data, error } = await supabase
     .from('etf_history')
     .select('*')
-    .order('week_date', { ascending: false })
-
+    .order('week_date', { ascending:false })
   if (error) throw error
   return data || []
 }
 
-// ── 네이버 뉴스 검색 ──────────────────────────────
-// CORS 우회용 프록시 사용
-const NAVER_PROXY = 'https://api.allorigins.win/raw?url='
-const NAVER_ID    = 'RTdxrbmuRrMDlHo_8_S4'
-const NAVER_SEC   = '0jVoZP3aF3'
+// ── 펀드 히스토리 ─────────────────────────────────────
+export async function saveFundToDB(date, snapshot) {
+  const { error } = await supabase
+    .from('fund_history')
+    .upsert({ load_date:date, snapshot }, { onConflict:'load_date' })
+  if (error) throw error
+}
 
-export async function searchNaverNews(query, display = 5) {
-  const url = `https://openapi.naver.com/v1/search/news.json?query=${encodeURIComponent(query)}&display=${display}&sort=date`
-  try {
-    const res = await fetch(NAVER_PROXY + encodeURIComponent(url), {
-      headers: {
-        'X-Naver-Client-Id':     NAVER_ID,
-        'X-Naver-Client-Secret': NAVER_SEC,
-      }
-    })
-    const data = await res.json()
-    return data.items || []
-  } catch {
-    return []
-  }
+export async function loadFundDateListFromDB() {
+  const { data, error } = await supabase
+    .from('fund_history')
+    .select('id, load_date, created_at')
+    .order('load_date', { ascending:false })
+  if (error) throw error
+  return data || []
+}
+
+export async function loadFundSnapshotFromDB(date) {
+  const { data, error } = await supabase
+    .from('fund_history')
+    .select('snapshot')
+    .eq('load_date', date)
+    .single()
+  if (error) throw error
+  return data?.snapshot || []
 }
