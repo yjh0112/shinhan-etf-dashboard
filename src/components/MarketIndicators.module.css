@@ -1,66 +1,111 @@
 .wrap { margin-bottom: 32px; }
 
-.header {
-  display: flex; align-items: center; justify-content: space-between;
-  margin-bottom: 16px;
-}
-.headerLeft { display: flex; align-items: center; gap: 12px; }
-.headerTitle { font-size: 14px; font-weight: 700; color: var(--text); }
-.updateTime  { font-family: var(--mono); font-size: 10px; color: var(--muted); }
+/* ── 헤더 ── */
+.header { display:flex; align-items:center; justify-content:space-between; margin-bottom:20px; }
+.headerLeft { display:flex; align-items:center; gap:12px; }
+.headerTitle { font-size:16px; font-weight:700; color:var(--text); }
+.updateTime  { font-family:var(--mono); font-size:11px; color:var(--muted); }
 .refreshBtn  {
-  padding: 5px 12px; border-radius: 7px; border: 1px solid var(--border2);
-  background: var(--surface); color: var(--text3); font-size: 11px;
-  cursor: pointer; transition: all .14s; font-family: var(--font);
+  padding:6px 14px; border-radius:8px; border:1px solid var(--border2);
+  background:var(--surface); color:var(--text2); font-size:12px; font-weight:600;
+  cursor:pointer; transition:all .14s; font-family:var(--font); display:flex; align-items:center; gap:6px;
 }
-.refreshBtn:hover    { border-color: var(--blue); color: var(--blue); }
-.refreshBtn:disabled { opacity: .5; cursor: not-allowed; }
+.refreshBtn:hover { border-color:var(--blue); color:var(--blue); }
+.refreshBtn:disabled { opacity:.5; cursor:not-allowed; }
 
-.catSection  { margin-bottom: 16px; }
-.catLabel    {
-  font-size: 10px; font-weight: 700; letter-spacing: 2px;
-  text-transform: uppercase; color: var(--muted);
-  margin-bottom: 8px; padding-left: 2px;
-}
-.grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
+/* ── 상단 2열 (스마트머니 + 공포탐욕) ── */
+.topRow { display:grid; grid-template-columns:1fr 200px; gap:16px; margin-bottom:24px; }
 
-/* 카드 */
-.card {
-  background: var(--surface); border: 1px solid var(--border);
-  border-radius: 10px; padding: 14px 16px; position: relative;
-  overflow: hidden; box-shadow: var(--shadow-sm);
-  transition: box-shadow .15s, transform .12s;
+/* ── 스마트머니 카드 ── */
+.smCard {
+  background:var(--surface); border:1px solid var(--border);
+  border-radius:14px; overflow:hidden; box-shadow:var(--shadow-sm);
 }
-.card:hover { box-shadow: var(--shadow-md); transform: translateY(-1px); }
+.smHeader {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:14px 18px; background:linear-gradient(135deg, var(--navy), var(--navy-mid));
+}
+.smHeaderLeft { display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+.smBadge  { font-size:10px; font-weight:700; letter-spacing:1px; background:rgba(201,168,76,.25); color:var(--gold); padding:3px 8px; border-radius:4px; }
+.smTitle  { font-size:14px; font-weight:700; color:#fff; }
+.smDate   { font-family:var(--mono); font-size:10px; color:rgba(255,255,255,.45); }
+.smRefresh{ background:rgba(255,255,255,.1); border:none; border-radius:6px; width:28px; height:28px; display:flex; align-items:center; justify-content:center; cursor:pointer; color:rgba(255,255,255,.6); font-size:14px; transition:all .14s; }
+.smRefresh:hover { background:rgba(255,255,255,.2); color:#fff; }
+.smRefresh:disabled { opacity:.4; cursor:not-allowed; }
 
-.accent {
-  position: absolute; bottom: 0; left: 0; right: 0;
-  height: 3px; border-radius: 0 0 10px 10px;
+.smLoading { padding:20px; text-align:center; color:var(--muted); font-size:13px; }
+.smError   { padding:14px 18px; background:#FFF5F5; color:#991B1B; font-size:12px; }
+.smEmpty   { padding:12px 18px; color:var(--muted); font-size:12px; }
+
+.smTabs { display:flex; border-bottom:1px solid var(--border); }
+.smTab  {
+  flex:1; padding:10px; border:none; background:transparent;
+  font-size:12px; font-weight:600; cursor:pointer; transition:all .14s; font-family:var(--font);
+  color:var(--muted);
+}
+.smTab:hover    { background:var(--surface2); }
+.smTabBuy       { color:var(--up); border-bottom:2px solid var(--up); background:var(--up-bg); }
+.smTabSell      { color:var(--dn); border-bottom:2px solid var(--dn); background:#FFF5F5; }
+
+.smList { max-height:320px; overflow-y:auto; }
+.smItem {
+  display:flex; align-items:center; gap:10px;
+  padding:9px 18px; border-bottom:1px solid rgba(232,234,237,.6);
+  transition:background .1s;
+}
+.smItem:last-child { border-bottom:none; }
+.smItem:hover { background:var(--surface2); }
+.smRank { font-family:var(--mono); font-size:12px; color:var(--muted); min-width:18px; }
+.smName { font-size:13px; font-weight:600; color:var(--text); flex:1; }
+.smEtf  { font-size:10px; color:var(--muted); background:var(--surface2); padding:2px 7px; border-radius:10px; white-space:nowrap; }
+.smAmt  { font-family:var(--mono); font-size:13px; font-weight:700; white-space:nowrap; }
+
+.smLink {
+  display:block; text-align:center; padding:10px;
+  font-size:11px; color:var(--blue); text-decoration:none;
+  border-top:1px solid var(--border); background:var(--surface2);
+  transition:background .14s;
+}
+.smLink:hover { background:var(--blue-light); }
+
+/* ── 공포탐욕 카드 ── */
+.fgCard {
+  background:var(--surface); border:1px solid var(--border);
+  border-radius:14px; padding:18px; box-shadow:var(--shadow-sm);
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px;
+}
+.fgLabel  { font-size:11px; font-weight:700; color:var(--text2); text-align:center; margin-bottom:4px; }
+.fgGauge  { margin:4px 0; }
+.fgRating { font-size:14px; font-weight:700; text-align:center; }
+
+/* ── 지표 그룹 ── */
+.group      { margin-bottom:20px; }
+.groupLabel {
+  font-size:12px; font-weight:700; color:var(--text2);
+  margin-bottom:10px; padding-left:10px;
+  border-left:3px solid;
 }
 
-.cardTop {
-  display: flex; justify-content: space-between; align-items: center;
-  margin-bottom: 8px;
-}
-.cardLabel { font-size: 11px; font-weight: 700; color: var(--text2); }
-.cardCat   {
-  font-size: 9px; color: var(--muted);
-  background: var(--surface2); padding: 1px 6px; border-radius: 4px;
-}
+/* ── 시세 카드 그리드 ── */
+.qGrid { display:grid; grid-template-columns:repeat(6,1fr); gap:10px; }
 
-.price {
-  font-family: var(--mono); font-size: 18px; font-weight: 700;
-  line-height: 1; margin-bottom: 4px;
+.qCard {
+  background:var(--surface); border:1px solid var(--border);
+  border-radius:10px; padding:12px 14px; position:relative;
+  overflow:hidden; box-shadow:var(--shadow-sm);
+  transition:box-shadow .15s, transform .12s;
 }
-.change { font-family: var(--mono); font-size: 10px; margin-bottom: 4px; }
-.time   { font-family: var(--mono); font-size: 9px; color: var(--muted); }
+.qCard:hover { box-shadow:var(--shadow-md); transform:translateY(-1px); }
+.qAccent    { position:absolute; bottom:0; left:0; right:0; height:3px; }
+
+.qLabel   { font-size:11px; font-weight:700; color:var(--text2); margin-bottom:6px; }
+.qPrice   { font-family:var(--mono); font-size:16px; font-weight:700; line-height:1; margin-bottom:3px; }
+.qChange  { font-family:var(--mono); font-size:10px; margin-bottom:3px; }
+.qTime    { font-family:var(--mono); font-size:9px; color:var(--muted); }
+.qLoading { font-size:16px; color:var(--muted); padding:6px 0; }
+.qError   { font-size:13px; color:var(--muted); padding:6px 0; }
 
 .up { color: var(--up); }
 .dn { color: var(--dn); }
 
-.loading { font-size: 18px; color: var(--muted); padding: 8px 0; }
-.noData  { font-size: 16px; color: var(--muted); padding: 8px 0; }
-
-.footer {
-  font-size: 10px; color: var(--muted);
-  text-align: right; margin-top: 4px;
-}
+.footer { font-size:10px; color:var(--muted); text-align:right; margin-top:8px; }
