@@ -1,0 +1,71 @@
+.wrap { margin-bottom:32px; }
+
+.empty {
+  background:var(--surface); border:2px dashed var(--border2);
+  border-radius:12px; padding:48px 32px; text-align:center; margin-bottom:32px;
+}
+.emptyIcon  { font-size:36px; margin-bottom:10px; }
+.emptyTitle { font-size:15px; font-weight:700; color:var(--text); margin-bottom:6px; }
+.emptyDesc  { font-size:12px; color:var(--text3); line-height:1.8; }
+
+/* 탭 */
+.tabs {
+  display:flex; align-items:center; gap:6px; margin-bottom:14px; flex-wrap:wrap;
+}
+.tab {
+  padding:6px 14px; border-radius:20px; border:1px solid var(--border2);
+  background:var(--surface); color:var(--text2);
+  font-size:11px; font-weight:600; cursor:pointer; transition:all .14s;
+  font-family:var(--font);
+}
+.tab:hover { border-color:var(--blue); color:var(--blue); }
+.active    { background:var(--blue); border-color:var(--blue); color:#fff; }
+.weekBadge {
+  margin-left:auto; font-family:var(--mono); font-size:10px;
+  background:var(--blue-light); color:var(--blue);
+  padding:3px 10px; border-radius:10px;
+}
+
+/* 테이블 */
+.table {
+  background:var(--surface); border:1px solid var(--border);
+  border-radius:12px; overflow:hidden; box-shadow:var(--shadow-sm);
+}
+.thead {
+  display:grid;
+  grid-template-columns: 48px 1fr 160px 52px 52px 52px 56px;
+  padding:9px 16px; background:var(--surface2);
+  border-bottom:2px solid var(--border);
+  font-size:10px; font-weight:700; letter-spacing:1px;
+  text-transform:uppercase; color:var(--muted);
+}
+.row {
+  display:grid;
+  grid-template-columns: 48px 1fr 160px 52px 52px 52px 56px;
+  padding:10px 16px; border-bottom:1px solid rgba(232,234,237,.6);
+  align-items:center; transition:background .1s;
+}
+.row:last-child { border-bottom:none; }
+.row:hover { background:#F8F9FC; }
+.top3 { background:linear-gradient(90deg, rgba(201,168,76,.04), transparent); }
+
+.rank { font-size:14px; text-align:center; }
+.nameCol { min-width:0; }
+.name { font-size:12px; font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.meta { display:flex; align-items:center; gap:5px; margin-top:3px; }
+.mgr  { font-size:10px; color:var(--muted); }
+
+/* 바 차트 */
+.barCol   { display:flex; align-items:center; gap:7px; }
+.barWrap  { flex:1; height:5px; background:var(--border); border-radius:3px; overflow:hidden; }
+.barFill  { height:100%; border-radius:3px; background:linear-gradient(90deg, var(--blue), #5E9FFF); transition:width .6s ease; }
+.barLabel { font-family:var(--mono); font-size:11px; font-weight:600; color:var(--blue); min-width:28px; }
+
+/* 카운트 셀 */
+.countCell { text-align:center; }
+.wBadge { background:#FEF9EE; color:#92400E; padding:2px 7px; border-radius:10px; font-family:var(--mono); font-size:11px; font-weight:600; }
+.mBadge { background:#EEF3FF; color:#1E40AF; padding:2px 7px; border-radius:10px; font-family:var(--mono); font-size:11px; font-weight:600; }
+.qBadge { background:#F5F3FF; color:#4C1D95; padding:2px 7px; border-radius:10px; font-family:var(--mono); font-size:11px; font-weight:600; }
+
+.weeksCell { text-align:center; }
+.weekCount { font-family:var(--mono); font-size:11px; color:var(--muted); }

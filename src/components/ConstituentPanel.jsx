@@ -88,12 +88,13 @@ export default function ConstituentPanel({ allUnique, selectedCode, onSelect, al
                 <tr><td>운용규모</td> <td className="gold">{fmtAum(etf.aum)}</td></tr>
                 <tr><td>총보수</td>   <td>{etf.fee.toFixed(2)}%</td></tr>
                 <EligRow code={etf.code} elig={elig} />
-                <tr><td>1일 수익률</td>  <td className={etf.d1  >= 0 ? 'up' : 'dn'}>{fmtPct(etf.d1)}</td></tr>
-                <tr><td>주간 수익률</td> <td className={etf.w1  >= 0 ? 'up' : 'dn'}>{fmtPct(etf.w1)}</td></tr>
-                <tr><td>1개월 수익률</td><td className={etf.m1  >= 0 ? 'up' : 'dn'}>{fmtPct(etf.m1)}</td></tr>
-                <tr><td>3개월 수익률</td><td className={etf.m3  >= 0 ? 'up' : 'dn'}>{fmtPct(etf.m3)}</td></tr>
-                <tr><td>6개월 수익률</td><td className={etf.m6  >= 0 ? 'up' : 'dn'}>{fmtPct(etf.m6)}</td></tr>
-                <tr><td>연초후 수익률</td><td className={etf.ytd >= 0 ? 'up' : 'dn'}>{fmtPct(etf.ytd)}</td></tr>
+                <tr><td>1일 수익률</td>   <td className={etf.d1  >= 0 ? 'up' : 'dn'}>{fmtPct(etf.d1)}</td></tr>
+                <tr><td>주간 수익률</td>  <td className={etf.w1  >= 0 ? 'up' : 'dn'}>{fmtPct(etf.w1)}</td></tr>
+                <tr><td>1개월 수익률</td> <td className={etf.m1  >= 0 ? 'up' : 'dn'}>{fmtPct(etf.m1)}</td></tr>
+                <tr><td>3개월 수익률</td> <td className={etf.m3  >= 0 ? 'up' : 'dn'}>{fmtPct(etf.m3)}</td></tr>
+                <tr><td>6개월 수익률</td> <td className={etf.m6  >= 0 ? 'up' : 'dn'}>{fmtPct(etf.m6)}</td></tr>
+                <tr><td>YTD 수익률</td>   <td className={etf.ytd >= 0 ? 'up' : 'dn'}>{fmtPct(etf.ytd)}</td></tr>
+                <tr><td>1년 수익률</td>   <td className={etf.y1  >= 0 ? 'up' : 'dn'}>{fmtPct(etf.y1)}</td></tr>
               </tbody>
             </table>
           </div>

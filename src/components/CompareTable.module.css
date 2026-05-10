@@ -1,4 +1,5 @@
 .wrap  { background:var(--surface); border:1px solid var(--border); border-radius:12px; overflow:hidden; box-shadow:var(--shadow-sm); margin-bottom:32px; overflow-x:auto; }
+.sortHint { font-size:10px; color:var(--muted); padding:8px 16px 0; text-align:right; }
 .table { width:100%; border-collapse:collapse; }
 .table th {
   padding:10px 12px; text-align:left;
