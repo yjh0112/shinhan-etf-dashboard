@@ -1,93 +1,24 @@
-.sidebar {
-  width: var(--sidebar-w);
-  min-height: 100vh;
-  background: var(--navy);
-  display: flex;
-  flex-direction: column;
-  position: fixed;
-  top: 0; left: 0; bottom: 0;
-  z-index: 200;
-  overflow: hidden;
-}
-
-/* 배경 장식 원 */
-.sidebar::before {
-  content: '';
-  position: absolute;
-  bottom: -80px; left: -60px;
-  width: 260px; height: 260px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(26,86,255,.18) 0%, transparent 70%);
-  pointer-events: none;
-}
-
-/* 로고 */
-.logo {
-  padding: 24px 20px 18px;
-  border-bottom: 1px solid rgba(255,255,255,.1);
-  flex-shrink: 0;
-}
-.logoImg {
-  width: 140px;
-  height: auto;
-  display: block;
-  filter: drop-shadow(0 2px 8px rgba(0,0,0,.3));
-}
-.logoDivider {
-  width: 40px; height: 2px;
-  background: linear-gradient(90deg, var(--gold), transparent);
-  margin-top: 14px; border-radius: 1px;
-}
-
-/* 네비 */
-.nav { flex: 1; padding: 16px 12px; overflow-y: auto; }
-.navLabel {
-  font-size: 9px; letter-spacing: 2px; text-transform: uppercase;
-  color: rgba(255,255,255,.3); padding: 10px 12px 6px;
-}
-.navItem {
-  display: flex; align-items: center; gap: 10px;
-  width: 100%; padding: 9px 12px; border-radius: 8px;
-  font-size: 13px; font-weight: 500; color: rgba(255,255,255,.6);
-  cursor: pointer; transition: all .15s; margin-bottom: 2px;
-  background: none; border: none; text-align: left; font-family: var(--font);
-}
-.navItem:hover { background: var(--navy-mid); color: rgba(255,255,255,.9); }
-.navIcon { font-size: 15px; min-width: 18px; text-align: center; opacity: .8; }
-
-/* 하단 */
-.footer {
-  padding: 14px;
-  border-top: 1px solid rgba(255,255,255,.07);
-  flex-shrink: 0;
-  display: flex; flex-direction: column; gap: 6px;
-}
-.eligItem {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 7px 10px; border-radius: 7px;
-  background: rgba(255,255,255,.05);
-  cursor: pointer; transition: background .15s;
-  border: none; width: 100%; font-family: var(--font);
-}
-.badge {
-  margin-left:auto; background:var(--gold); color:var(--navy);
-  font-family:var(--mono); font-size:9px; font-weight:700;
-  padding:2px 6px; border-radius:10px;
-}
-.newBadge {
-  margin-left:auto; background:rgba(52,211,153,.2); color:#6EE7B7;
-  font-size:9px; font-weight:700; padding:2px 6px; border-radius:10px;
-}
-.uploadItem {
-  background:rgba(26,86,255,.12);
-  border:1px solid rgba(26,86,255,.2);
-  color:rgba(255,255,255,.9) !important;
-  margin-bottom:4px;
-}
-.eligDate  {
-  font-family: var(--mono); font-size: 9px;
-  padding: 2px 7px; border-radius: 3px;
-}
-.trust   { background: var(--trust-bg); color: var(--trust); }
-.pension { background: var(--pension-bg); color: var(--pension); }
-.none    { background: rgba(255,255,255,.08); color: rgba(255,255,255,.3); }
+.sidebar{width:var(--sidebar-w);min-height:100vh;background:var(--navy);display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;z-index:200;overflow:hidden;}
+.sidebar::before{content:'';position:absolute;bottom:-80px;left:-60px;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,rgba(26,86,255,.18) 0%,transparent 70%);pointer-events:none;}
+.logo{padding:22px 20px 16px;border-bottom:1px solid rgba(255,255,255,.08);flex-shrink:0;cursor:pointer;}
+.logo:hover{opacity:.85;}
+.logoImg{width:140px;height:auto;display:block;filter:drop-shadow(0 2px 8px rgba(0,0,0,.3));}
+.logoDivider{width:40px;height:2px;background:linear-gradient(90deg,var(--gold),transparent);margin-top:12px;border-radius:1px;}
+.nav{flex:1;padding:14px 12px;overflow-y:auto;}
+.navLabel{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.3);padding:10px 12px 6px;}
+.navItem{display:flex;align-items:center;gap:10px;width:100%;padding:9px 12px;border-radius:8px;font-size:13px;font-weight:500;color:rgba(255,255,255,.6);cursor:pointer;transition:all .15s;margin-bottom:2px;background:none;border:none;text-align:left;font-family:var(--font);}
+.navItem:hover{background:var(--navy-mid);color:rgba(255,255,255,.9);}
+.navIcon{font-size:15px;min-width:18px;text-align:center;opacity:.8;}
+.backToMain{display:flex;align-items:center;gap:8px;width:100%;padding:8px 12px;border-radius:8px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.7);font-size:12px;font-weight:600;cursor:pointer;transition:all .15s;font-family:var(--font);text-align:left;margin-bottom:4px;}
+.backToMain:hover{background:rgba(255,255,255,.14);color:#fff;border-color:rgba(255,255,255,.25);}
+.badge{margin-left:auto;background:var(--gold);color:var(--navy);font-family:var(--mono);font-size:9px;font-weight:700;padding:2px 6px;border-radius:10px;}
+.newBadge{margin-left:auto;background:rgba(52,211,153,.2);color:#6EE7B7;font-size:9px;font-weight:700;padding:2px 6px;border-radius:10px;}
+.uploadItem{background:rgba(26,86,255,.12);border:1px solid rgba(26,86,255,.2);color:rgba(255,255,255,.9)!important;margin-bottom:4px;}
+.footer{padding:14px;border-top:1px solid rgba(255,255,255,.07);flex-shrink:0;display:flex;flex-direction:column;gap:6px;}
+.eligItem{display:flex;align-items:center;justify-content:space-between;padding:7px 10px;border-radius:7px;background:rgba(255,255,255,.05);cursor:pointer;transition:background .15s;border:none;width:100%;font-family:var(--font);}
+.eligItem:hover{background:rgba(255,255,255,.1);}
+.eligLabel{font-size:10px;color:rgba(255,255,255,.5);}
+.eligDate{font-family:var(--mono);font-size:9px;padding:2px 7px;border-radius:3px;}
+.trust{background:var(--trust-bg);color:var(--trust);}
+.pension{background:var(--pension-bg);color:var(--pension);}
+.none{background:rgba(255,255,255,.08);color:rgba(255,255,255,.3);}

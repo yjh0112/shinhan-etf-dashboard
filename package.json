@@ -1,7 +1,7 @@
 {
   "name": "shinhan-etf-dashboard",
   "version": "1.0.0",
-  "description": "Shinhan Premier ETF Dashboard",
+  "description": "Shinhan Premier ETF & Fund Dashboard",
   "type": "module",
   "scripts": {
     "dev": "vite",
