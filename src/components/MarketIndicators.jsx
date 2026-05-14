@@ -3,17 +3,32 @@ import styles from './MarketIndicators.module.css'
 
 const PROXY = 'https://api.allorigins.win/raw?url='
 
-// ── Yahoo Finance 시세 ────────────────────────────────
+// ── Yahoo Finance 전일 마감가 ─────────────────────────
 async function fetchQuote(symbol) {
-  const url = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(symbol)}?interval=1d&range=2d`
-  const res = await fetch(PROXY + encodeURIComponent(url), { signal: AbortSignal.timeout(8000) })
+  const url = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(symbol)}?interval=1d&range=5d`
+  const res = await fetch(PROXY + encodeURIComponent(url), { signal: AbortSignal.timeout(10000) })
   const data = await res.json()
-  const meta = data?.chart?.result?.[0]?.meta
-  if (!meta) throw new Error('no data')
-  const price = meta.regularMarketPrice
-  const prev  = meta.previousClose || meta.chartPreviousClose
-  const chg   = price - prev
-  return { price, change: chg, changePct: (chg / prev) * 100 }
+  const result = data?.chart?.result?.[0]
+  if (!result) throw new Error('no data')
+
+  // 완성된 봉 기준 — 마지막 2개 캔들 사용
+  const closes = result.indicators?.quote?.[0]?.close || []
+  const times  = result.timestamp || []
+
+  // null 제거 후 마지막 2개
+  const valid = closes.map((c,i) => ({c, t: times[i]})).filter(x => x.c != null)
+  if (valid.length < 2) throw new Error('insufficient data')
+
+  const last = valid[valid.length - 1]
+  const prev = valid[valid.length - 2]
+  const chg  = last.c - prev.c
+
+  return {
+    price:     last.c,
+    change:    chg,
+    changePct: (chg / prev.c) * 100,
+    date:      new Date(last.t * 1000).toLocaleDateString('ko-KR', { month:'2-digit', day:'2-digit' }),
+  }
 }
 
 // ── 공포탐욕지수 ──────────────────────────────────────
@@ -168,6 +183,7 @@ function QuoteCard({ item, data, loading, color }) {
               <div className={`${styles.qChange} ${isUp ? styles.up : styles.dn}`}>
                 {isUp ? '▲' : '▼'} {Math.abs(data.changePct).toFixed(2)}%
               </div>
+              {data.date && <div className={styles.qDate}>{data.date} 마감</div>}
             </>
           : <div className={styles.qPrice} style={{color:'var(--muted)'}}>--</div>
       }
