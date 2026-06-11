@@ -15,6 +15,8 @@ import Heatmap            from './components/Heatmap.jsx'
 import AccumRanking       from './components/AccumRanking.jsx'
 import NewsSection        from './components/NewsSection.jsx'
 import EtfSearch          from './components/EtfSearch.jsx'
+import EtfCompare         from './components/EtfCompare.jsx'
+import PdfReport          from './components/PdfReport.jsx'
 import EligibilityModal   from './components/EligibilityModal.jsx'
 import WeeklyUploadModal  from './components/WeeklyUploadModal.jsx'
 import DateSelector       from './components/DateSelector.jsx'
@@ -97,8 +99,12 @@ function EtfPage({onBack}){
           <Heatmap data={currentData} onSelect={setSelectedCode} elig={elig}/>
           <SectionHeader id="sec-accum" title="TOP5 누적 랭킹" desc={`${history.length}주 누적`}/>
           <AccumRanking ranking={accumRanking} totalWeeks={history.length}/>
+          <SectionHeader id="sec-etfcompare" title="ETF 비교 모드" desc="최대 3개 선택 → 기간별 수익률 한눈에 비교"/>
+          <EtfCompare allData={currentData}/>
           <SectionHeader id="sec-search" title="ETF 검색" desc={`${currentData.length}종목 즉시검색 · 없으면 AI가 찾아드립니다`}/>
           <EtfSearch allData={currentData} elig={elig}/>
+          <SectionHeader id="sec-report" title="PDF 보고서 생성" desc="ETF · 펀드 TOP5 자동 생성 → 인쇄 / PDF 저장"/>
+          <PdfReport etfData={currentData} fundData={[]} selectedDate={currentEntry?.date} fearGreed={null} quotes={{}}/>
           <SectionHeader id="sec-news" title="ETF 주요뉴스" desc="구글 뉴스 RSS 실시간"/>
           <NewsSection/>
         </>}
