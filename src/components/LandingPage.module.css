@@ -109,3 +109,35 @@
   font-size: 11px; color: rgba(255,255,255,.2);
   letter-spacing: .5px;
 }
+
+/* 4번째 카드 — 리포트 센터 */
+.cardReport {
+  border-top: 3px solid #7C3AED;
+}
+.cardReport .cardIcon { color: #7C3AED; }
+
+.toolTag {
+  display: inline-block;
+  margin-top: 8px;
+  font-size: 10px;
+  font-weight: 700;
+  color: #7C3AED;
+  background: #F5F3FF;
+  border: 1px solid #DDD6FE;
+  padding: 3px 10px;
+  border-radius: 20px;
+}
+
+/* 카드 4개로 늘면서 그리드 폭 조정 */
+.menuGrid {
+  grid-template-columns: repeat(4, 1fr);
+  max-width: 1080px;
+}
+
+/* 화면이 좁을 때 2x2로 */
+@media (max-width: 980px) {
+  .menuGrid {
+    grid-template-columns: repeat(2, 1fr);
+    max-width: 560px;
+  }
+}

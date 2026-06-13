@@ -3,7 +3,7 @@ import styles from './LandingPage.module.css'
 
 /**
  * 메인 랜딩 화면
- * 3가지 선택: 주요지표 / ETF / 펀드
+ * 4가지 선택: 주요지표 / ETF / 펀드 / 리포트센터
  */
 export default function LandingPage({ onSelect }) {
   return (
@@ -25,7 +25,7 @@ export default function LandingPage({ onSelect }) {
       <div className={styles.title}>Pathfinder Platform</div>
       <div className={styles.subtitle}>PB 자산관리 통합 대시보드</div>
 
-      {/* 메뉴 카드 3개 */}
+      {/* 메뉴 카드 4개 */}
       <div className={styles.menuGrid}>
         {/* 주요지표 */}
         <button className={`${styles.menuCard} ${styles.cardIndicator}`} onClick={() => onSelect('indicator')}>
@@ -45,7 +45,7 @@ export default function LandingPage({ onSelect }) {
           <div className={styles.cardTitle}>ETF 대시보드</div>
           <div className={styles.cardDesc}>
             국내 ETF 수익률 분석<br/>
-            TOP5 · 히트맵 · 비교<br/>
+            TOP5 · 히트맵 · 누적랭킹<br/>
             <span className={styles.weekTag}>매주 일요일 업데이트</span>
           </div>
           <div className={styles.cardArrow}>→</div>
@@ -59,6 +59,18 @@ export default function LandingPage({ onSelect }) {
             국내외 펀드 수익률 분석<br/>
             유형별 TOP · 위험등급<br/>
             <span className={styles.weekTag}>수시 업데이트</span>
+          </div>
+          <div className={styles.cardArrow}>→</div>
+        </button>
+
+        {/* 리포트 센터 */}
+        <button className={`${styles.menuCard} ${styles.cardReport}`} onClick={() => onSelect('report')}>
+          <div className={styles.cardIcon}>📄</div>
+          <div className={styles.cardTitle}>리포트 센터</div>
+          <div className={styles.cardDesc}>
+            ETF 비교 분석<br/>
+            고객 배포용 PDF 보고서<br/>
+            <span className={styles.toolTag}>비교 · 생성 도구</span>
           </div>
           <div className={styles.cardArrow}>→</div>
         </button>
