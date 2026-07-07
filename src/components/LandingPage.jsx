@@ -1,5 +1,6 @@
 import React from 'react'
 import styles from './LandingPage.module.css'
+import { COPYRIGHT } from '../utils/constants.js'
 
 /**
  * 메인 랜딩 화면
@@ -77,8 +78,8 @@ export default function LandingPage({ onSelect }) {
       </div>
 
       <div className={styles.footer}>
-        신한은행 PB팀 내부용 · 투자 권유 자료 아님
+        신한은행 내부용 · 투자 권유 자료 아님<br/>
+        {COPYRIGHT}
       </div>
-    </div>
   )
 }

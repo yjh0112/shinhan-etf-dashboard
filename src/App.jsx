@@ -22,6 +22,8 @@ import WeeklyUploadModal  from './components/WeeklyUploadModal.jsx'
 import DateSelector       from './components/DateSelector.jsx'
 import SectionHeader      from './components/SectionHeader.jsx'
 import styles             from './App.module.css'
+import { COPYRIGHT } from './utils/constants.js'
+
 
 function useTop5(data){
   return useMemo(()=>{
@@ -109,7 +111,7 @@ function EtfPage({onBack}){
           <NewsSection/>
         </>}
       </main>
-      <footer className={styles.footer}>데이터: <strong>funetf.co.kr</strong> · 레버리지·인버스 제외 · 수익률은 NAV 기준 · 본 자료는 투자 권유 자료가 아닙니다.</footer>
+      <footer className={styles.footer}>데이터: <strong>funetf.co.kr</strong> · 레버리지·인버스 제외 · 수익률은 NAV 기준 · 본 자료는 투자 권유 자료가 아닙니다.<br/>{COPYRIGHT}</footer>
     </div>
     {modalType&&<EligibilityModal type={modalType} existing={modalType==='trust'?trust:pension} etfData={currentData} onSave={handleEligSave} onClose={()=>setModalType(null)}/>}
     {showUpload&&<WeeklyUploadModal onSave={handleWeekSave} onClose={()=>setShowUpload(false)}/>}
